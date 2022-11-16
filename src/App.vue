@@ -81,8 +81,8 @@ const onlyStockHandler = ()=>{
         <main class="bg-white py-5 ml-6 basis-auto">
             <!-- component -->
             <CardAlbum 
-            v-for="album in localRecords"
-            :key="album.id"
+              v-for="album in localRecords"
+              :key="album.id"
               :album="album"
             />
         </main>
