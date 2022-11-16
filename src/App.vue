@@ -6,6 +6,25 @@ import CardAlbum from '@/components/CardAlbum.vue'
 console.log(records)
 
 const localRecords = ref(records)
+const onlyStock    = ref(false)
+
+
+const onlyStockHandler = ()=>{
+  if(onlyStock.value){
+    // on filtre que les albums en stock
+    localRecords.value = localRecords.value.filter((elem)=>elem.stock>0)
+  }else{
+    localRecords.value = records
+    // sinon on affiche tout 
+  }
+  console.log('Checkboxe Changed!!!', onlyStock.value)
+}
+
+// comment faire des filtres avec computed()
+// comment rendre cumulable les filtres et sort 
+
+
+
 
 </script>
 
@@ -25,7 +44,7 @@ const localRecords = ref(records)
                     
                     <fieldset>
                       <legend class="sr-only">Filtres</legend>
-                      <div class="text-base font-medium text-gray-900" aria-hidden="true">Filtres</div>
+                      <div class="text-base font-medium text-gray-900" aria-hidden="true">Filtres {{onlyStock}}</div>
                         <div class="mt-4 space-y-4">
 
                           <div class="flex items-start">
@@ -35,7 +54,8 @@ const localRecords = ref(records)
                                 name="comments" 
                                 type="checkbox" 
                                 class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
-                               
+                                @change="onlyStockHandler"
+                                v-model="onlyStock"
                               >
                             </div>
                             <div class="ml-3 text-sm">
