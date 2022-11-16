@@ -1,5 +1,11 @@
 <script setup>
+import {ref} from 'vue'
+import {records} from "@/assets/static/js/allRecords.js"
 import CardAlbum from '@/components/CardAlbum.vue'
+
+console.log(records)
+
+const localRecords = ref(records)
 
 </script>
 
@@ -54,8 +60,9 @@ import CardAlbum from '@/components/CardAlbum.vue'
 
         <main class="bg-white py-5 ml-6 basis-auto">
             <!-- component -->
-            <CardAlbum />
-            <CardAlbum />
+            <CardAlbum 
+              :album="localRecords[6]"
+            />
         </main>
       </div>
     
