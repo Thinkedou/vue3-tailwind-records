@@ -61,7 +61,9 @@ const localRecords = ref(records)
         <main class="bg-white py-5 ml-6 basis-auto">
             <!-- component -->
             <CardAlbum 
-              :album="localRecords[6]"
+            v-for="album in localRecords"
+            :key="album.id"
+              :album="album"
             />
         </main>
       </div>
