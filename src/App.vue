@@ -20,7 +20,7 @@
                     
                     <fieldset>
                       <legend class="sr-only">Filtres</legend>
-                      <div class="text-base font-medium text-gray-900" aria-hidden="true">Filtres {{onlyStock}}</div>
+                      <div class="text-base font-medium text-gray-900" aria-hidden="true">Filtres (3)</div>
                         <div class="mt-4 space-y-4">
 
                           <div class="flex items-start">
