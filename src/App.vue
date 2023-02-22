@@ -1,28 +1,4 @@
 <script setup>
-import {ref} from 'vue'
-import {records} from "@/assets/static/js/allRecords.js"
-import CardAlbum from '@/components/CardAlbum.vue'
-
-console.log(records)
-
-const localRecords = ref(records)
-const onlyStock    = ref(false)
-
-
-const onlyStockHandler = ()=>{
-  if(onlyStock.value){
-    // on filtre que les albums en stock
-    localRecords.value = localRecords.value.filter((elem)=>elem.stock>0)
-  }else{
-    localRecords.value = records
-    // sinon on affiche tout 
-  }
-  console.log('Checkboxe Changed!!!', onlyStock.value)
-}
-
-// comment faire des filtres avec computed()
-// comment rendre cumulable les filtres et sort 
-
 
 
 
