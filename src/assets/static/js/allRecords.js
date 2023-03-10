@@ -1,4 +1,15 @@
 export const records = [
+    
+    {
+        "id"             : 12,
+        "title"          :'Rin',
+        "artist"         :'Monolith Noir',
+        "year"           :'2010',
+        "stock"          :2,
+        "pitchforkPos"   :1,
+        "comment"        : "Pour son troisième album, Antoine Pasqualini et ses deux comparses de Monolithe Noir proposent des musiques sous influences bretonnes aux sonorités analogiques et électroniques",
+        "coverUrl"       :'https://www.benzinemag.net/wp-content/uploads/2022/09/Monolithe-Noir-Rin.jpg'
+    },
     {
         "id"       :   3,
         "title"    :'LP1',
@@ -89,6 +100,5 @@ export const records = [
         "comment"        : "Clarke screams like a man in fear for his own life as the song’s frenzied guitar tremolos",
         "coverUrl"       :'https://media.pitchfork.com/photos/5d76b1746eee70000829f38c/master/w_1600,c_limit/Deafheaven-Sunbather.jpg'
     }
-
 
 ]

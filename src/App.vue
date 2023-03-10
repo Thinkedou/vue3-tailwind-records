@@ -1,5 +1,65 @@
 <script setup>
+import {ref} from 'vue'
+import {records} from './assets/static/js/allRecords'
 
+
+import CardRecords from './components/CardRecords.vue';
+
+
+const title = ref('Nom de la page')
+
+console.log(title.value)
+
+const localRecords = ref(records)
+
+
+
+
+
+
+const increaseStockHandler = (data)=>{
+  console.warn('👂 Album Id::', data) // ici je récupère l'id de l'album
+  // donc je dois attraper le bon album dans localRecords 
+  const album = localRecords.value.find((album)=>album.id===data)
+  album.stock++
+  
+}
+
+// ref pour filtres (éléments de formulaire, branchés avec v-model)
+const stockOnly = ref(false)
+const sortOptions = ref("Pitchfork")
+
+
+const stockOnlyHandler = ()=>{
+  // si la personne à coché: stock only 
+  if(stockOnly.value){
+    localRecords.value = localRecords.value.filter((album)=>album.stock>0)
+  }else{
+    // si la personne a décoché ou jamais coché stockOnly
+    localRecords.value = records
+  }
+  //console.log('Hey CHANGE',stockOnly.value)
+}
+
+const handleSort = ()=>{
+
+  if(sortOptions.value=='Pitchfork'){
+    localRecords.value.sort((a, b) => a.pitchforkPos - b.pitchforkPos);
+  }
+
+  if(sortOptions.value=='Year'){
+    localRecords.value.sort((a, b)=> Number(b.year) - Number(a.year));
+  }
+   console.log(sortOptions.value)
+}
+const handleFav  = (albumId)=>{
+  // soit je passe par l'id et il me faut donc récupérer le bon album 
+  // soit je passe directement l'album en param 
+  const album = localRecords.value.find((album)=>album.id===albumId)
+  console.log('ajout en favori album:', album)
+  // J'ajoute à la volé, dynamiquement, un nouvel attribut: "isFav"
+  album.isFav = true
+}
 
 
 </script>
@@ -29,24 +89,29 @@
                                 id="comments" 
                                 name="comments" 
                                 type="checkbox" 
+                                @change="stockOnlyHandler"
+                                v-model="stockOnly"
                                 class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
-
                               >
                             </div>
                             <div class="ml-3 text-sm">
                               <label for="comments" class="font-medium text-cyan-700">In stock only</label>
                             </div>
-                           
                           </div>
      
                         </div>
                         <label for="sortBy" class="block text-sm mt-2 font-medium text-cyan-700">Sort by</label>
-                        <select id="sortBy" name="sortBy" class="mt-1 block w-full rounded-md border border-gray-300 bg-white py-2 px-3 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm">
-                          <option>Year     </option>
-                          <option>Pitchfork</option>
+                        <select 
+                            v-model="sortOptions"
+                            id="sortBy"
+                            name="sortBy" 
+                            @change="handleSort"
+                            class="mt-1 block w-full rounded-md border border-gray-300 bg-white py-2 px-3 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm">
+                          <option >Year</option>
+                          <option >Pitchfork</option>
                         </select>
                     </fieldset>
-                   
+                    {{ sortOptions }}
                   </div>
                
               </div>
@@ -54,63 +119,29 @@
         </div>
 
         <main class="bg-white py-5 ml-6 basis-auto">
-          <section class="text-gray-600 body-font ">
-            <!-- one records -->
-          <div class="container px-5 mx-auto ">
-            <div class="p-5 bg-white flex items-center mx-auto border-b shadow-md mb-10 border-gray-400 rounded-lg sm:flex-row flex-col ">
-              <div class="sm:w-44 sm:h-44 lg:w-40 lg:h-40 sm:mr-10 inline-flex items-center justify-center flex-shrink-0">
-                <img src="https://fr.shopping.rakuten.com/photo/spark-in-dark-the-best-of-alice-cooper-2071598576_ML.jpg">
-              </div>
-              <div class="flex-grow sm:text-left text-center mt-6 sm:mt-0">
-              <h1 class="text-black text-2xl title-font font-bold mb-2">Ants from up there</h1>
-              <h3 class="text-black text-xl title-font mb-2"> BC, NR<span class="font-light ml-2">2022</span></h3>
-              <p class="leading-relaxed text-base">Some comment, some comments, Some comment, some comments</p>
-              <div class="py-4">
-              
-                  <div  class=" inline-block mr-2" > <!-- quand le stock est ok  -->
-                    <div class="flex  pr-2 h-full items-center">
-                        <svg class="text-green-500 w-6 h-6 mr-1"  width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">  
-                            <path stroke="none" d="M0 0h24v24H0z"/>  
-                            <circle cx="12" cy="12" r="9" />  
-                            <path d="M9 12l2 2l4 -4" />
-                        </svg>
-                        <p class="title-font font-medium">3 stock</p>
-                    </div>
-                  </div>  
 
-                  <div class="inline-block mr-2"><!-- quand le stock est à zéro  -->
-                    <div class="flex pr-2 h-full items-center">
-                      <svg class="text-gray-500 w-6 h-6 mr-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <circle cx="12" cy="12" r="10"></circle>
-                        <line x1="15" y1="9" x2="9" y2="15"></line>
-                        <line x1="9" y1="9" x2="15" y2="15"></line>
-                      </svg>
-                      <p class="title-font font-medium">out of stock</p>
-                    </div>
-                  </div>
+          <CardRecords 
+            v-for="album in localRecords"
+              :key="album.id"
+              :title='album.title'
+              :artist='album.artist'
+              :cover-url="album.coverUrl"
+              :stock="album.stock"
+              :pitchfork-pos="album.pitchforkPos"
+              :year="album.year"
+              :id = "album.id"
+              :comment="album.comment"
+              :is-fav="album.isFav"
+              @onIncreaseStock="increaseStockHandler"
+              @click="handleFav(album.id)"
+          />
 
-              </div>
-            <div class="md:flex font-bold text-gray-800">
-              <div class="w-full md:w-1/2 flex space-x-3">
-                <div >
-                  <p>pitchfork pos : #2</p><!-- pitchfork pos  -->
-                </div>
-              </div>
-            <div class="w-full">
-              <div class="float-right">
-                <button type="button" class="border border-teal-500 bg-teal-500 text-white rounded-md px-4 py-2 m-2 ease select-none hover:bg-teal-400"> + </button>
-                <button type="button" class="border border-teal-500 bg-teal-500 text-white rounded-md px-4 py-2 m-2 ease select-none hover:bg-purple-800"> - </button>
-              </div>
-            </div>
-            </div>
-          </div>
-          </div>
-        </div>
-      </section>
         </main>
       </div>
     
-      <footer class="bg-gray-100">Pied</footer>
+      <footer class="bg-gray-100">
+
+      </footer>
 
     </div>
 </template>
